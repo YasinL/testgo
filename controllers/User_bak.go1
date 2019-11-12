@@ -1,0 +1,102 @@
+package controllers
+
+import (
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
+	"fmt"
+	"reflect"
+	)
+
+type TestController struct {
+	beego.Controller
+}
+
+//type User struct {
+//	Id       string
+//	Name string
+//}
+
+func typeof(v interface{}) string {
+	return reflect.TypeOf(v).String()
+}
+
+func (c *TestController) Get() {
+	orm.Debug=true
+	o :=orm.NewOrm()
+	//user := models.User{Name: "slene",Id:"10000"}
+	//id, err := o.Insert(&user)
+	//fmt.Printf("ID: %d, ERR: %v\n", id, err)
+	//c.Ctx.WriteString("sda")
+	//var users = new(models.User)
+	//users.Name = "slene"
+	//name := models.User{Id:user.Id,Name:user.Name}
+	//err:= o.Read(&name)
+	//
+	//
+	//fmt.Printf("ERR: %v\n", err)
+
+
+
+	// raw 查询 Params
+	//var maps []orm.Params
+	//num,_ := o.Raw("SELECT * FROM user").Values(&maps)
+	//num,_ := o.QueryTable(user.Name).All()
+	//
+	//fmt.Println(maps)
+	//for _,term := range maps{
+	//	fmt.Println(term["id"],":",term["name"],num)
+	//}
+
+	// map 转json
+	//mjson,_ :=json.Marshal(maps)
+	//mString :=string(mjson)
+	//c.Ctx.WriteString(mString)
+
+	// beego map 直接返回json
+	//c.Data["json"] = maps
+	//c.ServeJSON()
+
+
+	//var lists []orm.ParamsList
+	//var user []models.User
+	//num, err := o.QueryTable("user").Filter("name", "slene").All(&user)
+	var maps []orm.Params
+	fmt.Printf("%p", &maps)
+	num, err := o.QueryTable("user").Values(&maps)
+	fmt.Println(num)
+	if err == nil {
+		fmt.Printf("Result Nums: %d\n", num)
+		for _, m := range maps {
+			fmt.Println(m["Id"], m["Name"])
+		}
+	}
+
+
+	//if err == nil {
+	//	fmt.Printf("Result Nums: %d\n", num)
+		//var l  map[string]string
+		//l = make(map[string]string)
+		//
+		//for _, row := range num {
+		//
+		//
+		//	fmt.Println("1111111111111")
+		//
+		//
+		//	fmt.Println(row)
+			//fmt.Println("Name: %s, Age: %s", row[0], row[1])
+			//fmt.Printf("Name: %s, Age: %s\m", row[0], row[1])
+			//fmt.Printf("Name: %s, Age: %s\m",)
+		//}
+	//}
+
+	//fmt.Println("Returned Rows Num: %s, %s", num, err)
+	//fmt.Println("1111111111: %s", typeof(data))
+	fmt.Printf("%p", &maps)
+
+	c.Data["json"] =  maps
+	c.ServeJSON()
+
+
+
+}
